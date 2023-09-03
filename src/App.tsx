@@ -1,9 +1,11 @@
-import React from "react";
 import "./App.css";
-import AutoComplete, {
-  TSuggestion,
-} from "./components/auto-complete/AutoComplete";
+import AutoComplete from "./components/auto-complete/AutoComplete";
 import data from "./data/data.json";
+
+export type TSuggestion = {
+  id: number;
+  value: string;
+};
 
 export type TFilterSuggestions = (query: string) => Promise<TSuggestion[]>;
 

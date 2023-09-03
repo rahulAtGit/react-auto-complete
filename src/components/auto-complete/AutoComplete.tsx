@@ -1,55 +1,22 @@
-import React, { useCallback, useState } from "react";
-import "./AutoComplete.css";
+import React from "react";
 import { TFilterSuggestions } from "../../App";
+import "./AutoComplete.css";
+import { SuggestionList } from "./SuggestionList";
+import { useAutoComplete } from "./useAutoComplete";
 
 export type TAutoComplete = {
-  query?: string;
   filterSuggestions: TFilterSuggestions;
+  initialQuery?: string;
   maxSuggestionsToShow?: number;
 };
 
-export type TSuggestion = {
-  id: number;
-  value: string;
-};
-
-const debounce = (callback: Function, timeout = 500) => {
-  let timer: NodeJS.Timeout | null;
-  const self = this;
-  return function (...args: any[]) {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-      timer = null;
-      callback.apply(self, args);
-    }, timeout);
-  };
-};
-
 const AutoComplete: React.FC<TAutoComplete> = ({
-  maxSuggestionsToShow = 10,
-  ...props
+  filterSuggestions,
+  initialQuery,
+  maxSuggestionsToShow,
 }) => {
-  const [query, setQuery] = useState(props.query || "");
-  const [suggestions, setSuggestions] = useState<TSuggestion[]>([]);
-  const [noMatch, setNoMatch] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const fetchNew = async (newQuery: string) => {
-    console.log("sdfkjh");
-    const updated = await props.filterSuggestions(newQuery);
-    setIsLoading(false);
-    setSuggestions(updated);
-    setNoMatch(!!newQuery && !updated.length);
-  };
-
-  const debounsedCallback = useCallback(debounce(fetchNew), []);
-
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
-    const newQuery = e.target.value.trimStart();
-    setQuery(newQuery);
-    setIsLoading(true);
-    debounsedCallback(newQuery);
-  };
+  const { query, onChange, showNoMatch, isLoading, suggestions } =
+    useAutoComplete(filterSuggestions, initialQuery, maxSuggestionsToShow);
 
   return (
     <div className="auto-complete">
@@ -63,19 +30,8 @@ const AutoComplete: React.FC<TAutoComplete> = ({
         />
         {isLoading && <div className="loader" />}
       </div>
-      {!isLoading && (
-        <>
-          {noMatch && <span className="validation-info">No matches found</span>}
-          <ul className="suggestion-list">
-            {suggestions.slice(0, maxSuggestionsToShow).map((s) => (
-              <li className="suggestion" key={s.id}>
-                <strong>{s.value.substring(0, query.length)}</strong>
-                {s.value.substring(query.length)}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+      {showNoMatch && <span className="validation-info">No matches found</span>}
+      {!isLoading && <SuggestionList suggestions={suggestions} query={query} />}
     </div>
   );
 };
