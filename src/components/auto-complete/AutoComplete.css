@@ -1,0 +1,46 @@
+.auto-complete {
+  display: flex column;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  /* TODO: Change */
+  max-width: 360px;
+}
+.query {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #606060;
+  width: 100%;
+  font-size: 24px;
+  box-sizing: border-box;
+}
+
+.query:focus {
+  border-color: #3f51b5;
+}
+
+.suggestion-list {
+  display: flex column;
+  list-style-type: none;
+  width: 100%;
+  margin: 16px 0 0 0;
+  padding: 0;
+}
+.suggestion {
+  width: 100%;
+  font-size: 24px;
+  padding: 4px 0;
+  text-align: start;
+}
+
+.suggestion strong {
+  color: #3f51b5;
+}
+
+.validation-info {
+  display: inline-block;
+  width: 100%;
+  font-size: 14px;
+  color: #d63f3f;
+  text-align: start;
+}
