@@ -1,61 +1,81 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import "./AutoComplete.css";
+import { TFilterSuggestions } from "../../App";
 
-type TAutoComplete = {
-  query: string;
-  suggestions: TSuggestion[];
+export type TAutoComplete = {
+  query?: string;
+  filterSuggestions: TFilterSuggestions;
   maxSuggestionsToShow?: number;
 };
 
-type TSuggestion = {
+export type TSuggestion = {
   id: number;
   value: string;
 };
 
-const filterSuggestions: (args: TAutoComplete) => TSuggestion[] = (args) =>
-  !!args.query
-    ? args.suggestions.filter((s) =>
-        new RegExp(`^${args.query}`, "i").test(s.value)
-      )
-    : [];
+const debounce = (callback: Function, timeout = 500) => {
+  let timer: NodeJS.Timeout | null;
+  const self = this;
+  return function (...args: any[]) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      timer = null;
+      callback.apply(self, args);
+    }, timeout);
+  };
+};
 
 const AutoComplete: React.FC<TAutoComplete> = ({
   maxSuggestionsToShow = 10,
   ...props
 }) => {
-  const [query, setQuery] = useState(props.query);
-  const [suggestions, setSuggestions] = useState<TSuggestion[]>(
-    filterSuggestions({ query: props.query, suggestions: props.suggestions })
-  );
+  const [query, setQuery] = useState(props.query || "");
+  const [suggestions, setSuggestions] = useState<TSuggestion[]>([]);
+  const [noMatch, setNoMatch] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const fetchNew = async (newQuery: string) => {
+    console.log("sdfkjh");
+    const updated = await props.filterSuggestions(newQuery);
+    setIsLoading(false);
+    setSuggestions(updated);
+    setNoMatch(!!newQuery && !updated.length);
+  };
+
+  const debounsedCallback = useCallback(debounce(fetchNew), []);
+
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
     const newQuery = e.target.value.trimStart();
     setQuery(newQuery);
-    setSuggestions(
-      filterSuggestions({ query: newQuery, suggestions: props.suggestions })
-    );
+    setIsLoading(true);
+    debounsedCallback(newQuery);
   };
 
   return (
     <div className="auto-complete">
-      <input
-        className="query"
-        placeholder="Search Users"
-        value={query}
-        autoFocus
-        onChange={onChange}
-      />
-      {!!query && suggestions.length === 0 && (
-        <span className="validation-info">No matches found</span>
+      <div className="input-loader-wrapper">
+        <input
+          className="query"
+          placeholder="Search Users"
+          value={query}
+          autoFocus
+          onChange={onChange}
+        />
+        {isLoading && <div className="loader" />}
+      </div>
+      {!isLoading && (
+        <>
+          {noMatch && <span className="validation-info">No matches found</span>}
+          <ul className="suggestion-list">
+            {suggestions.slice(0, maxSuggestionsToShow).map((s) => (
+              <li className="suggestion" key={s.id}>
+                <strong>{s.value.substring(0, query.length)}</strong>
+                {s.value.substring(query.length)}
+              </li>
+            ))}
+          </ul>
+        </>
       )}
-      <ul className="suggestion-list">
-        {suggestions.slice(0, maxSuggestionsToShow).map((s) => (
-          <li className="suggestion" key={s.id}>
-            <strong>{s.value.substring(0, query.length)}</strong>
-            {s.value.substring(query.length)}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
