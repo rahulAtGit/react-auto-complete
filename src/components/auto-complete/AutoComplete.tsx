@@ -15,8 +15,14 @@ const AutoComplete: React.FC<TAutoComplete> = ({
   initialQuery,
   maxSuggestionsToShow,
 }) => {
-  const { query, onChange, showNoMatch, isLoading, suggestions } =
-    useAutoComplete(filterSuggestions, initialQuery, maxSuggestionsToShow);
+  const {
+    query,
+    onChange,
+    showNoMatch,
+    isLoading,
+    suggestions,
+    onSuggestionClick,
+  } = useAutoComplete(filterSuggestions, initialQuery, maxSuggestionsToShow);
 
   return (
     <div className="auto-complete">
@@ -31,7 +37,13 @@ const AutoComplete: React.FC<TAutoComplete> = ({
         {isLoading && <div className="loader" />}
       </div>
       {showNoMatch && <span className="validation-info">No matches found</span>}
-      {!isLoading && <SuggestionList suggestions={suggestions} query={query} />}
+      {!isLoading && (
+        <SuggestionList
+          suggestions={suggestions}
+          query={query}
+          onSuggestionClick={onSuggestionClick}
+        />
+      )}
     </div>
   );
 };

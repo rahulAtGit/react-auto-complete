@@ -13,7 +13,10 @@ type TUseAutoComplete = (
   showNoMatch: boolean;
   isLoading: boolean;
   suggestions: TSuggestion[];
+  onSuggestionClick: TOnSuggestionClick;
 };
+
+export type TOnSuggestionClick = (id: number) => void;
 
 export const useAutoComplete: TUseAutoComplete = (
   filterSuggestions,
@@ -42,11 +45,17 @@ export const useAutoComplete: TUseAutoComplete = (
     debounsedCallback(newQuery);
   };
 
+  const onSuggestionClick: TOnSuggestionClick = (id) => {
+    const clickedItem = suggestions.find((s) => s.id === id);
+    !!clickedItem && setQuery(clickedItem.value);
+  };
+
   return {
     query,
     onChange,
     showNoMatch: noMatch && !isLoading,
     isLoading,
     suggestions,
+    onSuggestionClick,
   };
 };

@@ -58,6 +58,11 @@
   font-size: 24px;
   padding: 4px 0;
   text-align: start;
+  cursor: pointer;
+}
+
+.suggestion:hover {
+  background-color: #e2e2e2;
 }
 
 .suggestion strong {
