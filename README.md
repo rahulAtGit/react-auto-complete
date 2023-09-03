@@ -1,6 +1,17 @@
-# Getting Started with Create React App
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Run the below commands to install and run the Project
+
+cd react-auto-complete
+
+npm install
+
+npm start
+
+Goto [http://localhost:3000](http://localhost:3000)
+
+Node Version: v16.16.0
+NPM Version: 8.19.2
 
 ## Available Scripts
 
