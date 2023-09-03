@@ -6,12 +6,15 @@ export const SuggestionList: React.FC<{
   suggestions: TSuggestion[];
   query: string;
   onSuggestionClick: TOnSuggestionClick;
+  activeIndex: number;
 }> = (props) => {
   return (
     <ul className="suggestion-list">
-      {props.suggestions.map((s) => (
+      {props.suggestions.map((s, index) => (
         <li
-          className="suggestion"
+          className={`suggestion ${
+            index === props.activeIndex ? "suggestion--active" : ""
+          }`}
           key={s.id}
           onClick={() => props.onSuggestionClick(s.id)}
         >

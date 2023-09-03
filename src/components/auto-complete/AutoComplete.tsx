@@ -22,6 +22,8 @@ const AutoComplete: React.FC<TAutoComplete> = ({
     isLoading,
     suggestions,
     onSuggestionClick,
+    keyUpEvents,
+    activeIndex,
   } = useAutoComplete(filterSuggestions, initialQuery, maxSuggestionsToShow);
 
   return (
@@ -33,15 +35,24 @@ const AutoComplete: React.FC<TAutoComplete> = ({
           value={query}
           autoFocus
           onChange={onChange}
+          onKeyUp={keyUpEvents}
         />
         {isLoading && <div className="loader" />}
       </div>
-      {showNoMatch && <span className="validation-info">No matches found</span>}
+      {showNoMatch && (
+        <span className="input-label no-match">No matches found</span>
+      )}
+      {!!suggestions.length && (
+        <span className="input-label info-guide">
+          Click or Use Arrows to select and Press Enter
+        </span>
+      )}
       {!isLoading && (
         <SuggestionList
           suggestions={suggestions}
           query={query}
           onSuggestionClick={onSuggestionClick}
+          activeIndex={activeIndex}
         />
       )}
     </div>
