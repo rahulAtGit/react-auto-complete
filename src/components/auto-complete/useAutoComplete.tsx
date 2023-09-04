@@ -49,13 +49,11 @@ export const useAutoComplete: TUseAutoComplete = (
   useEffect(() => {
     if (!!query) {
       setIsLoading(true);
-      setActiveIndex(-1);
-      debounsedCallback(query);
     } else {
-      setActiveIndex(-1);
-      setSuggestions([]);
       setNoMatch(false);
     }
+    setActiveIndex(-1);
+    debounsedCallback(query);
   }, [query]);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {

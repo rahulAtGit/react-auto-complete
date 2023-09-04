@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TFilterSuggestions } from "../../App";
 import "./AutoComplete.css";
 import { SuggestionList } from "./SuggestionList";
@@ -25,6 +25,10 @@ const AutoComplete: React.FC<TAutoComplete> = ({
     keyUpEvents,
     activeIndex,
   } = useAutoComplete(filterSuggestions, initialQuery, maxSuggestionsToShow);
+
+  useEffect(() => {
+    console.log("suggestions", suggestions);
+  }, [suggestions]);
 
   return (
     <div className="auto-complete">
