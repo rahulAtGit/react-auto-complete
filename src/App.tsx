@@ -8,19 +8,18 @@ export type TSuggestion = {
   value: string;
 };
 
-type TAPIResponse = {
-  options: TSuggestion[];
-};
+type TAPIResponse = TSuggestion[];
 
 export type TFilterSuggestions = (query: string) => Promise<TSuggestion[]>;
 
 const filterSuggestions: TFilterSuggestions = async (query) => {
+  if (!query) return [];
   // Fetch API the result is sorted in the server before sending
   const response = await fetch(
-    "https://mocki.io/v1/25b3fa0b-0d06-4a1d-90e3-a0f0ad74ffce"
+    `https://us-central1-rahulramesh12.cloudfunctions.net/autoComplete?query=${query}`
   );
-  const respJson = !!query && ((await response.json()) as TAPIResponse);
-  const suggestions = (!!respJson && respJson?.options) || [];
+  const respJson = (await response.json()) as TAPIResponse;
+  const suggestions = respJson || [];
   // Note: Uncomment the below line and comment the above code set of lines fetching the data
   // const suggestions = data.options;
   return suggestions;
