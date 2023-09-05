@@ -82,7 +82,7 @@ export const useAutoComplete: TUseAutoComplete = (
         break;
       }
       case "Enter": {
-        setQuery(suggestions[activeIndex].value);
+        activeIndex >= 0 && setQuery(suggestions[activeIndex].value);
         break;
       }
     }
