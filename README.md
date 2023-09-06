@@ -1,6 +1,6 @@
 ## Demo
 
-![](https://github.com/rahulAtGit/react-auto-complete/blob/master/public/Demo.gif)
+![](https://github.com/rahulAtGit/react-auto-complete/blob/master/public/demo.gif)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
