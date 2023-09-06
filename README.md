@@ -1,3 +1,7 @@
+## Demo
+
+![](https://github.com/rahulAtGit/react-auto-complete/blob/master/public/Demo.gif)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Run the below commands to install and run the Project
