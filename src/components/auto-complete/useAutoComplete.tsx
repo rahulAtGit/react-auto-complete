@@ -44,7 +44,7 @@ export const useAutoComplete: TUseAutoComplete = (
   };
 
   //useCallback is used to prevent rerender
-  const debounsedCallback = useCallback(debounce(fetchNew), []);
+  const debounsedCallback = useCallback(debounce(fetchNew));
 
   useEffect(() => {
     if (!!query) {
